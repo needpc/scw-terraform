@@ -1,0 +1,14 @@
+FROM hashicorp/terraform:0.11.7
+
+LABEL MAINTAINER="Aurelien PERRIER <a.perrier89@gmail.com>"
+LABEL APP="terraform"
+
+ENV SCALEWAY_ORGANIZATION=SCWPBJQDSRAYZPZRHBFE
+ENV SCALEWAY_TOKEN=bccae0d6-9926-4939-a618-306c3666ebee
+ENV SCALEWAY_REGION=par1
+
+VOLUME [ "/data" ]
+
+WORKDIR /data
+
+ENTRYPOINT [ "./exec.sh" ]
