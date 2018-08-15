@@ -181,7 +181,7 @@ resource "scaleway_security_group_rule" "kubernetes-lb-http" {
 }
 
 # https://www.terraform.io/docs/providers/scaleway/r/security_group_rule.html
-# Security Group Rule HTTP LB - Kubernetes Master
+# Security Group Rule HTTP ETCD Reader - Kubernetes Master
 resource "scaleway_security_group_rule" "kubernetes-etcd-read" {
   security_group = "${scaleway_security_group.kubernetes-master.id}"
 
@@ -193,7 +193,7 @@ resource "scaleway_security_group_rule" "kubernetes-etcd-read" {
 }
 
 # https://www.terraform.io/docs/providers/scaleway/r/security_group_rule.html
-# Security Group Rule HTTP LB - Kubernetes Master
+# Security Group Rule ETCD Writter - Kubernetes Master
 resource "scaleway_security_group_rule" "kubernetes-etcd-write" {
   security_group = "${scaleway_security_group.kubernetes-master.id}"
 
