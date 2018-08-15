@@ -18,9 +18,9 @@ resource "scaleway_security_group" "load-balancer" {
 # Security Group Rule ICMP - Load-Balancer
 resource "scaleway_security_group_rule" "load-balancer-icmp" {
   security_group = "${scaleway_security_group.load-balancer.id}"
-  action         = "drop"
+  action         = "accept"
   direction      = "inbound"
-  ip_range       = "0.0.0.0/0"
+  ip_range       = "10.0.0.0/8"
   protocol       = "ICMP"
   port           = 0
 }
@@ -77,9 +77,9 @@ resource "scaleway_security_group" "database" {
 # Security Group Rule ICMP - Load-Balancer
 resource "scaleway_security_group_rule" "database-icmp" {
   security_group = "${scaleway_security_group.database.id}"
-  action         = "drop"
+  action         = "accept"
   direction      = "inbound"
-  ip_range       = "0.0.0.0/0"
+  ip_range       = "10.0.0.0/8"
   protocol       = "ICMP"
   port           = 0
 }
@@ -126,9 +126,9 @@ resource "scaleway_security_group" "kubernetes-master" {
 resource "scaleway_security_group_rule" "kubernetes-icmp" {
   security_group = "${scaleway_security_group.kubernetes-master.id}"
 
-  action    = "drop"
+  action    = "accept"
   direction = "inbound"
-  ip_range  = "0.0.0.0/0"
+  ip_range  = "10.0.0.0/8"
   protocol  = "ICMP"
   port      = 0
 }
@@ -149,9 +149,9 @@ resource "scaleway_security_group_rule" "kubernetes-ssh" {
 # Security Group Rule HTTP - Kubernetes Master
 resource "scaleway_security_group_rule" "kubernetes-http" {
   security_group = "${scaleway_security_group.kubernetes-master.id}"
-  action         = "drop"
+  action         = "accept"
   direction      = "inbound"
-  ip_range       = "0.0.0.0/0"
+  ip_range       = "10.0.0.0/8"
   protocol       = "TCP"
   port           = 80
 }
@@ -161,9 +161,9 @@ resource "scaleway_security_group_rule" "kubernetes-http" {
 resource "scaleway_security_group_rule" "kubernetes-https" {
   security_group = "${scaleway_security_group.kubernetes-master.id}"
 
-  action    = "drop"
+  action    = "accept"
   direction = "inbound"
-  ip_range  = "0.0.0.0/0"
+  ip_range  = "10.0.0.0/8"
   protocol  = "TCP"
   port      = 443
 }
@@ -180,3 +180,26 @@ resource "scaleway_security_group_rule" "kubernetes-lb-http" {
   port      = 31372
 }
 
+# https://www.terraform.io/docs/providers/scaleway/r/security_group_rule.html
+# Security Group Rule HTTP LB - Kubernetes Master
+resource "scaleway_security_group_rule" "kubernetes-etcd-read" {
+  security_group = "${scaleway_security_group.kubernetes-master.id}"
+
+  action    = "accept"
+  direction = "inbound"
+  ip_range  = "10.0.0.0/8"
+  protocol  = "TCP"
+  port      = 2379
+}
+
+# https://www.terraform.io/docs/providers/scaleway/r/security_group_rule.html
+# Security Group Rule HTTP LB - Kubernetes Master
+resource "scaleway_security_group_rule" "kubernetes-etcd-write" {
+  security_group = "${scaleway_security_group.kubernetes-master.id}"
+
+  action    = "accept"
+  direction = "inbound"
+  ip_range  = "10.0.0.0/8"
+  protocol  = "TCP"
+  port      = 2380
+}
