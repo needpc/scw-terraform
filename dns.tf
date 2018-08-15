@@ -1,3 +1,9 @@
+#############################
+#     CLOUDFLARE DNS LB     #
+#############################
+
+# https://www.terraform.io/docs/providers/cloudflare/r/record.html
+# DNS Record - Load-Balancer
 resource "cloudflare_record" "load-balancer" {
   domain = "needpc.fr"
   name   = "needpc.fr"
@@ -7,6 +13,13 @@ resource "cloudflare_record" "load-balancer" {
   proxied = true
 }
 
+
+#############################
+#     CLOUDFLARE DNS API    #
+#############################
+
+# https://www.terraform.io/docs/providers/cloudflare/r/record.html
+# DNS Record - api
 resource "cloudflare_record" "api" {
   domain = "needpc.fr"
   name   = "api"
@@ -16,6 +29,13 @@ resource "cloudflare_record" "api" {
   proxied = true
 }
 
+
+#############################
+#   CLOUDFLARE DNS MOBILE   #
+#############################
+
+# https://www.terraform.io/docs/providers/cloudflare/r/record.html
+# DNS Record - m
 resource "cloudflare_record" "mobile" {
   domain = "needpc.fr"
   name   = "m"
@@ -25,6 +45,13 @@ resource "cloudflare_record" "mobile" {
   proxied = true
 }
 
+
+##########################
+#   CLOUDFLARE DNS WWW   #
+##########################
+
+# https://www.terraform.io/docs/providers/cloudflare/r/record.html
+# DNS Record - www
 resource "cloudflare_record" "www" {
   domain = "needpc.fr"
   name   = "www"
@@ -34,6 +61,28 @@ resource "cloudflare_record" "www" {
   proxied = true
 }
 
+# https://www.terraform.io/docs/providers/cloudflare/r/page_rule.html
+# Forwarding rules - www
+resource "cloudflare_page_rule" "www" {
+  zone = "${cloudflare_record.load-balancer.hostname}"
+  target = "https://${cloudflare_record.load-balancer.hostname}"
+  priority = 1
+
+  actions = {
+    forwarding_url {
+      url = "https://${cloudflare_record.www.hostname}"
+      status_code = 301
+    } 
+  }
+}
+
+
+##########################
+# CLOUDFLARE DNS STATUS  #
+##########################
+
+# https://www.terraform.io/docs/providers/cloudflare/r/record.html
+# DNS Record - status
 resource "cloudflare_record" "status" {
   domain = "needpc.fr"
   name   = "status"
